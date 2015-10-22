@@ -1,6 +1,7 @@
 {
   "name"             : "vi-kon/laravel-menu",
   "description"      : "Dynamic menu structure for Laravel 5.1",
+  "version"          : "0.0.1",
   "keywords"         : [
     "laravel",
     "menu"
@@ -12,7 +13,7 @@
     }
   ],
   "require"          : {
-    "php"                 : ">=5.6.0",
+    "php"                : ">=5.5.9",
     "illuminate/container": "~5.1",
     "illuminate/support"  : "~5.1"
   },
