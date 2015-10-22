@@ -66,7 +66,7 @@ class Link extends Text implements ActivatableComponent, IconableComponent
         $this->route = compact('name', 'attributes');
 
         if ($authByRoute === true) {
-            $this->authenticator = function (RouterAuth $routerAuth) use ($name) {
+            $this->authenticators[] = function (RouterAuth $routerAuth) use ($name) {
                 return $routerAuth->hasAccess($name);
             };
         }

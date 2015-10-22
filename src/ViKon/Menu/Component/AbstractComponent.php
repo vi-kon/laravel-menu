@@ -5,6 +5,13 @@ namespace ViKon\Menu\Component;
 use Illuminate\Contracts\Container\Container;
 use ViKon\Menu\MenuBuilder;
 
+/**
+ * Class AbstractComponent
+ *
+ * @package ViKon\Menu\Component
+ *
+ * @author  Kovács Vince<vincekovacs@hotmail.com>
+ */
 class AbstractComponent
 {
     /** @type  string */
@@ -16,14 +23,14 @@ class AbstractComponent
     /** @type callback|null */
     protected $formatter;
 
-    /** @type callback */
-    protected $authenticator;
+    /** @type callback[] */
+    protected $authenticators = [];
 
     /** @type \Illuminate\Contracts\Container\Container */
     protected $container;
 
     /**
-     * @param string $token
+     * @param string $token unique token to identify component inside menu
      */
     public function __construct($token)
     {
@@ -79,13 +86,17 @@ class AbstractComponent
     }
 
     /**
+     * Add new authenticator to set
+     *
+     * Authenticator processing order depend on add order
+     *
      * @param callable|object $authenticator
      *
      * @return $this
      */
-    public function setAuthenticator($authenticator)
+    public function addAuthenticator($authenticator)
     {
-        $this->authenticator = $authenticator;
+        $this->authenticators[] = $authenticator;
 
         return $this;
     }
@@ -137,15 +148,18 @@ class AbstractComponent
      */
     protected function authenticate()
     {
-        if ($this->authenticator === null) {
-            return true;
+        // Loop over all added authenticator
+        foreach ($this->authenticators as $authenticator) {
+            if (is_object($authenticator) && method_exists($authenticator, 'authenticate')) {
+                if ($this->container->call([$authenticator, 'authenticate'], ['component' => $this]) !== true) {
+                    return false;
+                }
+            } elseif ($this->container->call($authenticator, [$this]) !== true) {
+                return false;
+            }
         }
 
-        if (is_object($this->authenticator) && method_exists($this->authenticator, 'authenticate')) {
-            return (bool)$this->container->call([$this->authenticator, 'authenticate'], ['component' => $this]);
-        }
-
-        return (bool)$this->container->call($this->authenticator, [$this]);
+        return true;
     }
 
     /**

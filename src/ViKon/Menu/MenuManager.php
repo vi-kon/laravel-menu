@@ -29,7 +29,7 @@ class MenuManager
     }
 
     /**
-     * @param string                                  $token     menu unique identifier
+     * @param string                                  $token     unique identifier for menu
      * @param \ViKon\Menu\Component\AbstractComponent $component component instance
      *
      * @return $this
@@ -42,9 +42,11 @@ class MenuManager
     }
 
     /**
-     * If menu exists return it, otherwise create and store menu under token and return it
+     * Get menu by token
      *
-     * @param string $token
+     * Note: If menu not exists create new menu builder instance and store under given token.
+     *
+     * @param string $token unique identifier for menu
      *
      * @return \ViKon\Menu\MenuBuilder
      */
@@ -59,7 +61,9 @@ class MenuManager
     }
 
     /**
-     * @param string $token menu unique identifier
+     * Render given menu
+     *
+     * @param string $token unique identifier for menu
      *
      * @return string
      */
