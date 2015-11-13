@@ -46,7 +46,8 @@ class Link extends Text implements ActivatableComponent, IconableComponent
      */
     public function setUrl($url)
     {
-        $this->url = $url;
+        $this->url   = $url;
+        $this->route = null;
 
         return $this;
     }
@@ -79,13 +80,22 @@ class Link extends Text implements ActivatableComponent, IconableComponent
      */
     public function isActive()
     {
+        // If no URL or Route set, then link cannot be active
+        if ($this->url === null && $this->route === null) {
+            return false;
+        }
+
+        // If URL start with # then it is only client side routing
         if (Str::startsWith($this->url, '#')) {
             return false;
         }
 
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
+        $pattern = $this->route !== null
+            ? ltrim($this->container->make('url')->route($this->route['name'], $this->route['attributes'], false), '/')
+            : $this->url;
 
-        return $this->container->make('request')->is($this->url);
+        /** @noinspection PhpMethodParametersCountMismatchInspection */
+        return $this->container->make('request')->is($pattern);
     }
 
     /**
