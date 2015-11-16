@@ -26,6 +26,8 @@ class Link extends Text implements ActivatableComponent, IconableComponent
     protected $route;
 
     /**
+     * Get route URL
+     *
      * @return string
      */
     public function getUrl()
@@ -40,6 +42,8 @@ class Link extends Text implements ActivatableComponent, IconableComponent
     }
 
     /**
+     * Set route URL
+     *
      * @param string $url
      *
      * @return $this
