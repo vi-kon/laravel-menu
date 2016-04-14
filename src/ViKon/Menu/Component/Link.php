@@ -2,6 +2,7 @@
 
 namespace ViKon\Menu\Component;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use ViKon\Auth\RouterAuth;
 use ViKon\Menu\Component\Helper\ActivatableComponent;
@@ -26,6 +27,8 @@ class Link extends Text implements ActivatableComponent, IconableComponent
     protected $route;
 
     /**
+     * Get route URL
+     *
      * @return string
      */
     public function getUrl()
@@ -40,13 +43,16 @@ class Link extends Text implements ActivatableComponent, IconableComponent
     }
 
     /**
+     * Set route URL
+     *
      * @param string $url
      *
      * @return $this
      */
     public function setUrl($url)
     {
-        $this->url = $url;
+        $this->url   = $url;
+        $this->route = null;
 
         return $this;
     }
@@ -79,13 +85,12 @@ class Link extends Text implements ActivatableComponent, IconableComponent
      */
     public function isActive()
     {
-        if (Str::startsWith($this->url, '#')) {
+        // If URL start with # then it is only client side routing
+        if (Str::startsWith($this->getUrl(), '#')) {
             return false;
         }
 
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-
-        return $this->container->make('request')->is($this->url);
+        return Str::is($this->getUrl(), $this->container->make(Request::class)->url());
     }
 
     /**

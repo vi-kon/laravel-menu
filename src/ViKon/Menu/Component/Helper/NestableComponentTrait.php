@@ -27,6 +27,15 @@ trait NestableComponentTrait
     {
         $this->nestedComponents[$nestedComponent->getToken()] = $nestedComponent;
 
+        /** @type \ViKon\Menu\Component\AbstractComponent $this */
+        if ($this->getMenuBuilder() !== null) {
+            $nestedComponent->setMenuBuilder($this->getMenuBuilder());
+        }
+
+        if ($this->getContainer() !== null) {
+            $nestedComponent->setContainer($this->getContainer());
+        }
+
         return $this;
     }
 
