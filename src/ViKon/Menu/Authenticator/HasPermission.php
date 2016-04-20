@@ -1,8 +1,8 @@
 <?php
 
 namespace ViKon\Menu\Authenticator;
+use Illuminate\Contracts\Auth\Guard;
 
-use ViKon\Auth\Guard;
 
 /**
  * Class HasPermission
@@ -25,7 +25,7 @@ class HasPermission
     }
 
     /**
-     * @param \ViKon\Auth\Guard $guard
+     * @param \Illuminate\Contracts\Auth\Guard $guard
      *
      * @return bool|null
      */
